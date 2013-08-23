@@ -6,35 +6,29 @@ module ConnectionProxy {
     export class DataStoreRingBuffer {
         public static MaxSize: number = 100;
 
-        private _index: number;
-
-        constructor(private _key: string, private _store: Store) {           
-            this.UpdateIndex();
-        }
+        constructor(private _key: string, private _store: Store) {}
 
         public Push(value: IDataStoreMessage): void {
             var buffer = this.GetBuffer() || [];
 
-            // Ensure our index is pointing at the next open slot
-            this.UpdateIndex();
+            buffer.push(value);
 
-            buffer[this._index] = value;
+            // If we're pushing the MaxSize + 1th item we need to remove one from the front of the buffer
+            if (buffer.length > DataStoreRingBuffer.MaxSize) {
+                buffer.shift();
+            }
 
             this._store.Set(this._key, buffer);
         }
 
         public Peak(): IDataStoreMessage {
-            this.UpdateIndex();
+            var buffer = this.GetBuffer();
 
-            return this.GetBuffer()[this._index - 1];
+            return buffer[buffer.length - 1];
         }
 
         public Read(index: number): IDataStoreMessage {
             return this.GetBuffer()[index];
-        }
-
-        private UpdateIndex(): void {
-            this._index = this.GetBuffer().length % DataStoreRingBuffer.MaxSize;
         }
 
         private GetBuffer(): Array<IDataStoreMessage> {
