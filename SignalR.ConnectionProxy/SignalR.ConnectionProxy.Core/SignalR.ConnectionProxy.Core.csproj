@@ -10,6 +10,7 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <UseIISExpress>true</UseIISExpress>
+    <LibraryOutputLocation>Scripts/signalR.connectionProxy.js</LibraryOutputLocation>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -46,11 +47,43 @@
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptOutFile>$(LibraryOutputLocation)</TypeScriptOutFile>
+    <TypeScriptGeneratesDeclarations>true</TypeScriptGeneratesDeclarations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
     <TypeScriptSourceMap>false</TypeScriptSourceMap>
+    <TypeScriptOutFile>$(LibraryOutputLocation)</TypeScriptOutFile>
+    <TypeScriptGeneratesDeclarations>true</TypeScriptGeneratesDeclarations>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="DataStore\DataStore.js">
+      <DependentUpon>DataStore.ts</DependentUpon>
+    </Content>
+    <Content Include="DataStore\DataStoreEventHandler.js">
+      <DependentUpon>DataStoreEventHandler.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="DataStore\DataStoreEventHandler.ts" />
+    <Content Include="DataStore\DataStoreRingBuffer.js">
+      <DependentUpon>DataStoreRingBuffer.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="DataStore\DataStoreSubscription.ts" />
+    <Content Include="DataStore\DataStoreSubscription.js">
+      <DependentUpon>DataStoreSubscription.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="DataStore\IDataStoreMessage.ts" />
+    <Content Include="DataStore\IDataStoreMessage.js">
+      <DependentUpon>IDataStoreMessage.ts</DependentUpon>
+    </Content>
+    <Content Include="Scripts\signalR.connectionProxy.d.ts" />
+    <Content Include="Scripts\signalR.connectionProxy.js" />
+    <Content Include="DataStore\Store.js">
+      <DependentUpon>Store.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="DataStore\Store.ts" />
+    <TypeScriptCompile Include="DataStore\DataStoreRingBuffer.ts" />
+    <TypeScriptCompile Include="DataStore\DataStore.ts" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" />
 </Project>
