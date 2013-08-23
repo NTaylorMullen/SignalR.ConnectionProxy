@@ -27,3 +27,6 @@ PublishProfiles/
 *.vspx
 *.log.txt
 *.js.map
+signalR.connectionProxy.js
+signalR.connectionProxy.d.ts
+SignalR.ConnectionProxy/SignalR.ConnectionProxy.Core/**/*.js
