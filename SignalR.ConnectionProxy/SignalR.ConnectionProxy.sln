@@ -11,6 +11,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.ConnectionProxy.Core", "SignalR.ConnectionProxy.Core\SignalR.ConnectionProxy.Core.csproj", "{7FE1A1AC-E1E3-498F-86AF-658D99068F96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.ConnectionProxy.Samples", "SignalR.ConnectionProxy.Samples\SignalR.ConnectionProxy.Samples.csproj", "{0A9D85EB-9D36-4094-B69D-8EBAF7BF6465}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7FE1A1AC-E1E3-498F-86AF-658D99068F96} = {7FE1A1AC-E1E3-498F-86AF-658D99068F96}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Samples";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <style>
+        div.sampleBox {
+            border: 1px solid black;
+            padding: 15px;
+        }
+    </style>
+}
+
+<div class="page-header section_header">
+    <h3>Samples</h3>
+
+    <div class="sampleBox">
+        <h4>PubSub</h4>
+        <p>Demonstrates the basics of the SignalR.ConnectionProxy extension.</p>
+        <a class="btn btn-success btn-large" href="@Url.RouteUrl("Samples", new { controller = "Samples", sample = "PubSub" })">View</a>
+    </div>
+</div>

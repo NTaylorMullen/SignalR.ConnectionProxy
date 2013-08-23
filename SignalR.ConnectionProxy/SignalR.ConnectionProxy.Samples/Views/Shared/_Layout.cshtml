@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>SignalR.ConnectionProxy - @ViewBag.Title</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    @Styles.Render("~/bundles/maincss")
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="/">SignalR.ConnectionProxy</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li class="active"><a href="/">Samples</a></li>
+                        <li><a href="https://github.com/NTaylorMullen/SignalR.ConnectionProxy" target="_blank">Source Code</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sampleBody" class="container">       
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/signalr")
+    @Scripts.Render("~/bundles/mainjs")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
