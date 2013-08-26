@@ -142,6 +142,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\BroadcastHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +161,7 @@
     <Content Include="Scripts\signalR.connectionProxy.d.ts" />
     <Content Include="Scripts\signalR.connectionProxy.js" />
     <Content Include="Scripts\typings\jquery\jquery.d.ts" />
+    <Content Include="Scripts\typings\signalr\signalr.d.ts" />
     <Content Include="Styles\common.css">
       <DependentUpon>common.less</DependentUpon>
     </Content>

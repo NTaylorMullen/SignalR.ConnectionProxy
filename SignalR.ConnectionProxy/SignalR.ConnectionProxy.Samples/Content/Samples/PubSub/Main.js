@@ -1,12 +1,17 @@
+/// <reference path="../../../Scripts/typings/signalr/signalr.d.ts" />
 /// <reference path="../../../Scripts/typings/jquery/jquery.d.ts" />
 /// <reference path="../../../Scripts/signalR.connectionProxy.d.ts" />
-var dataStore = new ConnectionProxy.DataStore();
+var broadcastHub = ($.connection).broadcastHub, messageHolder = $("#messages"), broadcastButton = $("#broadcast"), broadcastText = $("#broadcastText");
 
-dataStore.Subscribe("foo", function (value) {
-    $("body").append("<p>Foo fired with value: " + value + "</p>");
+broadcastHub.client.broadcast = function (msg) {
+    messageHolder.append("<p>Broadcasted: " + msg + "</p>");
+};
+
+$.connection.hub.start({ persistConnection: true }).done(function () {
+    broadcastButton.click(function () {
+        broadcastHub.server.broadcast(broadcastText.val());
+    });
+
+    messageHolder.append("<p>Started</p>");
 });
-
-setTimeout(function () {
-    dataStore.Publish("foo", "Uno");
-}, 1000);
 //# sourceMappingURL=Main.js.map
