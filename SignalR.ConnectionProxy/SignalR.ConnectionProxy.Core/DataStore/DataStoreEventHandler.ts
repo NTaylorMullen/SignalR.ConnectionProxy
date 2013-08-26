@@ -5,17 +5,22 @@
 module ConnectionProxy {
 
     export class DataStoreEventHandler {
-        private static InternalEvents: Array<string> = new Array<string>(DataStore.DataStoreIdLocation);
+        private static InternalEvents: Array<string>;
 
         constructor(store: Store, dataStoreId: number, onEvent: (event: string, data: any) => void) {
-            var storageEvent = (event: StorageEvent) => {
-                var eventKey: string = store.CleanKey(event.key),
-                    messages: Array<IDataStoreMessage> = JSON.parse(event.newValue),
-                    message: IDataStoreMessage = messages[messages.length - 1];
+            DataStoreEventHandler.InternalEvents = new Array<string>(DataStore.DataStoreIdChannel);
 
-                if (this.IsExternalEventKey(eventKey) && dataStoreId !== message.DataStoreID) {
-                    onEvent(eventKey, message.Data);
+            var storageEvent = (event: StorageEvent) => {
+                try {
+                    var eventKey: string = store.CleanKey(event.key),
+                        messages: Array<IDataStoreMessage> = JSON.parse(event.newValue),
+                        message: IDataStoreMessage = messages[messages.length - 1];
+
+                    if (this.IsExternalEventKey(eventKey) && dataStoreId !== message.DataStoreID) {
+                        onEvent(eventKey, message.Data);
+                    }
                 }
+                catch(ex) {}
             };
 
             if (!window.addEventListener) {

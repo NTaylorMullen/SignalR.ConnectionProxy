@@ -15,6 +15,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -64,6 +66,16 @@
     <Content Include="DataStore\DataStoreEventHandler.js">
       <DependentUpon>DataStoreEventHandler.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="ProxyPingHandler.ts" />
+    <Content Include="ProxyPingHandler.js">
+      <DependentUpon>ProxyPingHandler.ts</DependentUpon>
+    </Content>
+    <Content Include="Scripts\typings\jquery\jquery.d.ts" />
+    <Content Include="Scripts\typings\signalr\signalr.d.ts" />
+    <Content Include="SignalR\SignalRExtension.js">
+      <DependentUpon>SignalRExtension.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="SignalR\SignalRExtension.ts" />
     <TypeScriptCompile Include="DataStore\DataStoreEventHandler.ts" />
     <Content Include="DataStore\DataStoreRingBuffer.js">
       <DependentUpon>DataStoreRingBuffer.ts</DependentUpon>
@@ -76,6 +88,10 @@
     <Content Include="DataStore\IDataStoreMessage.js">
       <DependentUpon>IDataStoreMessage.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="ProxyManager.ts" />
+    <Content Include="ProxyManager.js">
+      <DependentUpon>ProxyManager.ts</DependentUpon>
+    </Content>
     <Content Include="Scripts\signalR.connectionProxy.d.ts" />
     <Content Include="Scripts\signalR.connectionProxy.js" />
     <Content Include="DataStore\Store.js">
@@ -85,5 +101,9 @@
     <TypeScriptCompile Include="DataStore\DataStoreRingBuffer.ts" />
     <TypeScriptCompile Include="DataStore\DataStore.ts" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>

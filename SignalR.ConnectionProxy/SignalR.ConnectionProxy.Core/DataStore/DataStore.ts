@@ -1,13 +1,15 @@
 /// <reference path="Store.ts" />
 /// <reference path="DataStoreSubscription.ts" />
+/// <reference path="DataStoreEventHandler.ts" />
 
 module ConnectionProxy {
 
     export class DataStore {
-        public static DataStoreIdLocation: string = "dataStoreIds";
+        public static DataStoreIdChannel: string = "dataStoreIds";
+
+        public ID: number;
 
         private _store: Store;
-        private _id: number;
         private _eventHandler: DataStoreEventHandler;
         private _subscriptions: { [event: string]: DataStoreSubscription };
 
@@ -16,7 +18,7 @@ module ConnectionProxy {
 
             this.RegisterId();
 
-            this._eventHandler = new DataStoreEventHandler(this._store, this._id, (event: string, data: any) => {
+            this._eventHandler = new DataStoreEventHandler(this._store, this.ID, (event: string, data: any) => {
                 this.ProcessEvent(event, data);
             });
 
@@ -25,7 +27,7 @@ module ConnectionProxy {
 
         public Subscribe(event: string, callback: (data: any) => void): void {
             if (!(this._subscriptions[event] instanceof DataStoreSubscription)) {
-                this._subscriptions[event] = new DataStoreSubscription(event, this._store, this._id);
+                this._subscriptions[event] = new DataStoreSubscription(event, this._store, this.ID);
             }
 
             this._subscriptions[event].Subscribe(callback);
@@ -45,15 +47,15 @@ module ConnectionProxy {
 
         // This assumes that pages aren't racing to set data store ID's (very very unlikely)
         private RegisterId(): void {
-            var location = DataStore.DataStoreIdLocation;
+            var location = DataStore.DataStoreIdChannel;
 
             if (this._store.Get(location) === null) {
-                this._id = 0;
+                this.ID = 0;
             } else {
-                this._id = parseInt(this._store.Get(location));
+                this.ID = parseInt(this._store.Get(location));
             }
 
-            this._store.Set(location, this._id + 1);
+            this._store.Set(location, this.ID + 1);
         }
     }
 }
