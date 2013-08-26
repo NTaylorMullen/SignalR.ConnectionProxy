@@ -67,6 +67,10 @@
       <DependentUpon>DataStoreEventHandler.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="ProxyPingHandler.ts" />
+    <TypeScriptCompile Include="ProxyCommunicator.ts" />
+    <Content Include="ProxyCommunicator.js">
+      <DependentUpon>ProxyCommunicator.ts</DependentUpon>
+    </Content>
     <Content Include="ProxyPingHandler.js">
       <DependentUpon>ProxyPingHandler.ts</DependentUpon>
     </Content>

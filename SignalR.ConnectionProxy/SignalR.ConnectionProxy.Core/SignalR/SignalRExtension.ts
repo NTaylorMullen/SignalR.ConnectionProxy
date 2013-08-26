@@ -2,11 +2,13 @@
 /// <reference path="../ProxyManager.ts" />
 
 module ConnectionProxy {
-    var savedConnectionInit = (<any>$.connection).fn.init;
+    var savedConnectionInit = (<any>$.connection).fn.init,
+        savedProcessMessages = $.signalR.transports._logic.processMessages;
 
     (<any>$.connection).fn.init = function () {
         var savedStart = this.start,
             savedStop = this.stop,
+            savedSend = this.send,
             connection = this;
 
         this.start = function (options, callback) {
@@ -41,6 +43,24 @@ module ConnectionProxy {
             savedStop.apply(this, arguments);
         };
 
+        this.send = function (data) {
+            if (SharedProxy.IsHost()) {
+                savedSend.call(this, data);
+            } else {
+                SharedProxy.Send(data);
+            }
+
+            return this;
+        };
+
         savedConnectionInit.apply(this, arguments);
+    };
+
+    $.signalR.transports._logic.processMessages = (connection: SignalR, minData: any) => {
+        if (SharedProxy.IsHost() && SharedProxy.ValidConnection(connection)) {
+            SharedProxy.Broadcast(minData);
+        }
+
+        savedProcessMessages.apply($.signalR.transports._logic, arguments);
     };
 }

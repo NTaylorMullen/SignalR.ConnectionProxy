@@ -2,21 +2,20 @@
 /// <reference path="DataStore/DataStore.ts" />
 /// <reference path="DataStore/Store.ts" />
 /// <reference path="ProxyPingHandler.ts" />
+/// <reference path="ProxyCommunicator.ts" />
 
 module ConnectionProxy {
 
     export class ProxyManager {
-        public static ReceiveChannel: string = "Receive";
 
         private _dataStore: DataStore;
         private _connections: Array<SignalR>;
         private _pingHandler: ProxyPingHandler;
+        private _communicator: ProxyCommunicator;
         private _isHost: boolean;
         private _onReady: Array<() => void>;
 
         constructor() {
-            var savedProcessMessages = $.signalR.transports._logic.processMessages;
-
             this._onReady = new Array<() => {}>();
             this._isHost = undefined;
             this._dataStore = new DataStore();
@@ -27,25 +26,25 @@ module ConnectionProxy {
                 this._isHost = false;
                 this.TriggerOnReady();
             }, () => {
-                this._isHost = true;
-                this.TriggerOnReady();
-            });
+                    this._isHost = true;
+                    this.TriggerOnReady();
+                });
 
-            this._dataStore.Subscribe(ProxyManager.ReceiveChannel, (data) => {
+            this._communicator = new ProxyCommunicator(this._dataStore, (data) => {
                 if (!this.IsHost()) {
                     for (var i = 0; i < this._connections.length; i++) {
-                        savedProcessMessages.call($.signalR.transports._logic, this._connections[i], data);
+                        $.signalR.transports._logic.processMessages.call($.signalR.transports._logic, this._connections[i], data);
                     }
                 }
-            });
-
-            $.signalR.transports._logic.processMessages = (connection: SignalR, minData: any) => {
-                if (this.IsHost() && this.ValidConnection(connection)) {
-                    this._dataStore.Publish(ProxyManager.ReceiveChannel, minData);
-                }
-
-                savedProcessMessages.apply($.signalR.transports._logic, arguments);
-            };
+            },
+                (data) => {
+                    if (this.IsHost()) {
+                        // TODO only send from correct connection
+                        for (var i = 0; i < this._connections.length; i++) {
+                            this._connections[i].send(data);
+                        }
+                    }
+                });
         }
 
         public RegisterConnection(connection: SignalR): void {
@@ -74,13 +73,15 @@ module ConnectionProxy {
             }
         }
 
-        private TriggerOnReady(): void {
-            for (var i = 0; i < this._onReady.length; i++) {
-                this._onReady[i]();
-            }
+        public Send(data: any): void {
+            this._communicator.Send(data);
         }
 
-        private ValidConnection(connection: SignalR): boolean {
+        public Broadcast(data: any): void {
+            this._communicator.Broadcast(data);
+        }
+
+        public ValidConnection(connection: SignalR): boolean {
             for (var i = 0; i < this._connections.length; i++) {
                 if (this._connections[i] === connection) {
                     return true;
@@ -88,6 +89,12 @@ module ConnectionProxy {
             }
 
             return false;
+        }
+
+        private TriggerOnReady(): void {
+            for (var i = 0; i < this._onReady.length; i++) {
+                this._onReady[i]();
+            }
         }
     }
 
