@@ -13,7 +13,9 @@ broadcastHub.client.broadcast = function (msg) {
 
 $.connection.hub.start({ persistConnection: true }).done(function () {
     broadcastButton.click(function () {
-        broadcastHub.server.broadcast(broadcastText.val());
+        broadcastHub.server.broadcast(broadcastText.val()).done(function () {
+            messageHolder.append("<p><em>Done triggered.</em></p>");
+        });
     });
 
     messageHolder.append("<p>Started</p>");

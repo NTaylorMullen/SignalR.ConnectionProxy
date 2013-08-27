@@ -33,7 +33,7 @@ module ConnectionProxy {
             this._communicator = new ProxyCommunicator(this._dataStore, (data) => {
                 if (!this.IsHost()) {
                     for (var i = 0; i < this._connections.length; i++) {
-                        $.signalR.transports._logic.processMessages.call($.signalR.transports._logic, this._connections[i], data);
+                        $(this._connections[i]).triggerHandler($.signalR.events.onReceived, [data]);
                     }
                 }
             },
